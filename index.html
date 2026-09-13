@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams Namensgenerator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --border-color: rgba(255, 255, 255, 0.4);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            color: var(--text-main);
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, #3f2b96, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .result-container {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .result-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .result-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            word-break: break-all;
+            min-height: 2rem;
+        }
+
+        .copy-btn {
+            margin-top: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s, transform 0.1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .copy-success {
+            background: #10b981 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Teams Namensgenerator</h1>
+
+        <div class="form-group">
+            <label for="teamType">Art des Teams</label>
+            <select id="teamType">
+                <option value="unter_mittel">Unter-/Mittelstufe</option>
+                <option value="oberstufe">Oberstufe (Kursstufe)</option>
+                <option value="ag">Arbeitsgemeinschaft (AG)</option>
+            </select>
+        </div>
+
+        <!-- Gemeinsames Feld: Jahrgang (nicht für AG, laut Beispiel) -->
+        <div class="form-group" id="yearGroup">
+            <label for="startYear">Startjahr des Schuljahres</label>
+            <input type="number" id="startYear" min="2000" max="2100" placeholder="z.B. 2023">
+        </div>
+
+        <!-- Felder Unter-/Mittelstufe -->
+        <div id="fields-unter-mittel">
+            <div class="form-group">
+                <label for="um_klasse">Klasse (z.B. 5a)</label>
+                <input type="text" id="um_klasse" placeholder="Klasse">
+            </div>
+            <div class="form-group">
+                <label for="um_fach">Fachkürzel (z.B. D, E)</label>
+                <input type="text" id="um_fach" placeholder="Fach">
+            </div>
+            <div class="form-group">
+                <label for="um_lehrer">Lehrerkürzel</label>
+                <input type="text" id="um_lehrer" placeholder="Kürzel">
+            </div>
+        </div>
+
+        <!-- Felder Oberstufe -->
+        <div id="fields-oberstufe" class="hidden">
+            <div class="form-group">
+                <label for="os_stufe">Jahrgangsstufe (z.B. Q1)</label>
+                <input type="text" id="os_stufe" placeholder="Stufe">
+            </div>
+            <div class="form-group">
+                <label for="os_fach">Fachkürzel</label>
+                <input type="text" id="os_fach" placeholder="Fach">
+            </div>
+            <div class="form-group">
+                <label for="os_niveau">Niveau</label>
+                <select id="os_niveau">
+                    <option value="BF">Basisfach (BF)</option>
+                    <option value="LF">Leistungsfach (LF)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="os_lehrer">Lehrerkürzel</label>
+                <input type="text" id="os_lehrer" placeholder="Kürzel">
+            </div>
+        </div>
+
+        <!-- Felder AG -->
+        <div id="fields-ag" class="hidden">
+            <div class="form-group">
+                <label for="ag_name">Name der AG</label>
+                <input type="text" id="ag_name" placeholder="z.B. Programmieren">
+            </div>
+            <div class="form-group">
+                <label for="ag_lehrer">Lehrerkürzel</label>
+                <input type="text" id="ag_lehrer" placeholder="Kürzel">
+            </div>
+        </div>
+
+        <div class="result-container">
+            <div class="result-label">Generierter Team-Name</div>
+            <div class="result-value" id="resultName"></div>
+            <button class="copy-btn" id="copyBtn">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                In Zwischenablage kopieren
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Aktuelles Jahr für Startjahr setzen
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth();
+            const startYearInput = document.getElementById('startYear');
+            startYearInput.value = currentMonth < 7 ? currentYear - 1 : currentYear; // Vor August altes Schuljahr
+
+            // Referenzen zu den Elementen
+            const teamType = document.getElementById('teamType');
+            const yearGroup = document.getElementById('yearGroup');
+            const fieldsUM = document.getElementById('fields-unter-mittel');
+            const fieldsOS = document.getElementById('fields-oberstufe');
+            const fieldsAG = document.getElementById('fields-ag');
+            const resultName = document.getElementById('resultName');
+            const copyBtn = document.getElementById('copyBtn');
+
+            // Formular umschalten
+            function updateVisibility() {
+                const type = teamType.value;
+                fieldsUM.classList.add('hidden');
+                fieldsOS.classList.add('hidden');
+                fieldsAG.classList.add('hidden');
+                yearGroup.classList.remove('hidden');
+
+                if (type === 'unter_mittel') fieldsUM.classList.remove('hidden');
+                if (type === 'oberstufe') fieldsOS.classList.remove('hidden');
+                if (type === 'ag') {
+                    fieldsAG.classList.remove('hidden');
+                    yearGroup.classList.add('hidden'); // Kein Jahr bei AG laut Konvention
+                }
+                generateName();
+            }
+
+            // Generierungslogik
+            function generateName() {
+                const type = teamType.value;
+                let name = '';
+
+                // Jahrgang berechnen (z.B. 2022-23)
+                const startY = parseInt(startYearInput.value) || new Date().getFullYear();
+                const nextY = (startY + 1).toString().slice(-2);
+                const jahrgang = `${startY}-${nextY}`;
+
+                if (type === 'unter_mittel') {
+                    const kl = document.getElementById('um_klasse').value.trim();
+                    const fa = document.getElementById('um_fach').value.trim();
+                    const le = document.getElementById('um_lehrer').value.trim();
+                    name = [kl, fa, le, jahrgang].filter(Boolean).join(' ');
+                } 
+                else if (type === 'oberstufe') {
+                    const stufe = document.getElementById('os_stufe').value.trim();
+                    let fach = document.getElementById('os_fach').value.trim();
+                    const niveau = document.getElementById('os_niveau').value;
+                    const lehrer = document.getElementById('os_lehrer').value.trim();
+
+                    // Groß-/Kleinschreibung je nach Niveau
+                    if (fach) {
+                        fach = niveau === 'BF' ? fach.toLowerCase() : fach.toUpperCase();
+                    }
+
+                    name = [stufe, fach, niveau, lehrer, jahrgang].filter(Boolean).join(' ');
+                } 
+                else if (type === 'ag') {
+                    const ag = document.getElementById('ag_name').value.trim();
+                    const lehrer = document.getElementById('ag_lehrer').value.trim();
+                    const agPrefix = ag ? `AG ${ag}` : 'AG';
+                    name = [agPrefix, lehrer].filter(Boolean).join(' ');
+                }
+
+                resultName.textContent = name || 'Bitte Felder ausfüllen';
+            }
+
+            // Event-Listener hinzufügen
+            teamType.addEventListener('change', updateVisibility);
+            
+            // Alle Inputs überwachen
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', generateName);
+            });
+
+            // In Zwischenablage kopieren
+            copyBtn.addEventListener('click', () => {
+                const textToCopy = resultName.textContent;
+                if(textToCopy === 'Bitte Felder ausfüllen') return;
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Kopiert!';
+                    copyBtn.classList.add('copy-success');
+                    
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                        copyBtn.classList.remove('copy-success');
+                    }, 2000);
+                });
+            });
+
+            // Initiale Ansicht
+            updateVisibility();
+        });
+    </script>
+</body>
+</html>
